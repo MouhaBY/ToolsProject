@@ -7,7 +7,7 @@ import sqlite3
 from sqlite3 import Error
 
 global db_file
-db_file = r"..\..\data\database.db"
+db_file = r"..\data\database.db"
 
 
 def create_connection():
@@ -62,8 +62,15 @@ def delete_query(table_name, reference, item):
     return result_query
 
 
-def main():
+def initialise_database():
+    # Create database
     create_connection()
+    # Create Tables
+    # Create default data
+
+
+def main():
+    pass
 
 
 if __name__.endswith('__main__'):
