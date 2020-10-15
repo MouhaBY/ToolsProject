@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-"""creation du fichier de la base des donnees"""
 
 import sqlite3
 from sqlite3 import Error
 
+# database file directory
 global db_file
 db_file = r"..\data\database.db"
 
