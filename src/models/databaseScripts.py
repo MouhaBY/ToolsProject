@@ -23,30 +23,43 @@ def create_connection():
             conn.close()
 
 
-def execute_query(query):
+def execute_query(query, data=None):
     try:
         conn = sqlite3.connect(db_file)
         with conn:
-            _result = conn.execute(query)
-            conn.commit()
-            return _result
+            if data is None:
+                _result = conn.execute(query)
+                conn.commit()
+            else:
+                _result = conn.execute(query, data)
+                conn.commit()
+        return _result
         conn.close()
         print("Query executed successfully")
     except Error as e:
         print(f"The error '{e}' has occurred")
 
 
-def execute_query_data(query,data):
-    try:
-        conn = sqlite3.connect(db_file)
-        with conn:
-            _result = conn.execute(query, data)
-            conn.commit()
-            return _result
-        conn.close()
-        print("Query executed successfully")
-    except Error as e:
-        print(f"The error '{e}' has occurred")
+def select_query(table_name, data="all", reference=None, item=None):
+    if item is None:
+        sql = 'SELECT * FROM {}'.format(table_name)
+    else:
+        sql = 'SELECT * FROM {} WHERE {} = "{}"'.format(table_name, reference, item)
+    _result = execute_query(sql)
+    if data == "all":
+        result_query = _result.fetchall()
+    elif data == "row":
+        result_query = _result.fetchone()
+    else:
+        result_query = None
+    return result_query
+
+
+def delete_query(table_name, reference, item):
+    sql = 'DELETE FROM {} WHERE {} = "{}"'.format(table_name, reference, item)
+    _result = execute_query(sql)
+    result_query = _result.fetchone()
+    return result_query
 
 
 def main():
