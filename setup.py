@@ -14,8 +14,8 @@ from cx_Freeze import setup, Executable
 
 
 #main
-file_directory = r'.\src\main.py'
-exe = Executable(script= file_directory, base="Win32GUI")
+file_directory = r'.\main.py'
+exe = Executable(script=file_directory, base="Win32GUI")
 
 buildOptions = dict(excludes=[], includes=[], packages=[], optimize=1)
 
