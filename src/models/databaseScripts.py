@@ -41,15 +41,17 @@ def execute_query(query, data=None):
         print(f"The error '{e}' has occurred")
 
 
-def select_query(table_name, data="all", reference=None, item=None):
+def select_query(table_name, datatype="all", reference=None, item=None):
     if item is None:
         sql = 'SELECT * FROM {}'.format(table_name)
+        _result = execute_query(sql)
     else:
         sql = 'SELECT * FROM {} WHERE {} = "{}"'.format(table_name, reference, item)
-    _result = execute_query(sql)
-    if data == "all":
+        _result = execute_query(sql)
+
+    if datatype == "all":
         result_query = _result.fetchall()
-    elif data == "row":
+    elif datatype == "row":
         result_query = _result.fetchone()
     else:
         result_query = None
@@ -58,9 +60,7 @@ def select_query(table_name, data="all", reference=None, item=None):
 
 def delete_query(table_name, reference, item):
     sql = 'DELETE FROM {} WHERE {} = "{}"'.format(table_name, reference, item)
-    _result = execute_query(sql)
-    result_query = _result.fetchone()
-    return result_query
+    execute_query(sql)
 
 
 def main():
