@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from src.models import databaseScripts as dbs
+from src import databaseInit as dbi
 
 
 # application definition
 def main():
-    dbs.initialise_database()
+    dbi.initialise_database()
 
 
 if __name__.endswith('__main__'):

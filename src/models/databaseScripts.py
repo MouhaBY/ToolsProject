@@ -5,9 +5,10 @@
 import sqlite3
 from sqlite3 import Error
 
+
 # database file directory
 global db_file
-db_file = r"..\data\database.db"
+db_file = r".\data\database.db"
 
 
 def create_connection():
@@ -60,13 +61,6 @@ def delete_query(table_name, reference, item):
     _result = execute_query(sql)
     result_query = _result.fetchone()
     return result_query
-
-
-def initialise_database():
-    # Create database
-    create_connection()
-    # Create Tables
-    # Create default data
 
 
 def main():
