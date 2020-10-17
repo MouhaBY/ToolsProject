@@ -11,6 +11,8 @@ import src.models.Profiles_table as Profiles_table
 import src.models.UsersProfiles_table as UsersProfiles_Table
 import src.models.Modules_table as Modules_table
 import src.models.ProfilesModules_table as ProfilesModules_table
+import src.models.Actions_table as Actions_table
+import src.models.ActivityLog_table as ActivityLog_table
 
 
 def initialise_database():
@@ -27,6 +29,8 @@ def initialise_database():
     UsersProfiles_Table.create()
     Modules_table.create()
     ProfilesModules_table.create()
+    Actions_table.create()
+    ActivityLog_table.create()
 
     # Create default data
     Pictures_table.add(("filename", "0XDHFRE", "C:"))
@@ -37,3 +41,4 @@ def initialise_database():
     UsersProfiles_Table.affect(("1","1"))
     Modules_table.add(("Module", "description", 1))
     ProfilesModules_table.affect(("1", "1"))
+    Actions_table.add(("action1", "description", 1))
