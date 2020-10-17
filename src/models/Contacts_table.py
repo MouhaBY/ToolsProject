@@ -15,16 +15,52 @@ def create():
      "registration"	TEXT,
      "phone" TEXT,
      "mobile" TEXT,
-     "companies_id"	INTEGER,
      "function"	TEXT,
-     "active" BOOLEAN NOT NULL DEFAULT 'True',
+     "companies_id"	INTEGER,
+     "pictures_id" INTEGER,
+     "active" BOOLEAN DEFAULT 'True',
      FOREIGN KEY("companies_id") REFERENCES "Companies"("id"),
+     FOREIGN KEY("pictures_id") REFERENCES "Pictures"("id"),
      PRIMARY KEY("id" AUTOINCREMENT)
     ); """
     dbs.execute_query(sql)
 
 
 def add(data):
-    sql = """ INSERT INTO Contacts (name, subname, address, registration, phone, mobile, companies_id, function, active)
-                    values(?, ?, ?, ?, ?, ?, ?, ?, ?) """
+    sql = """ INSERT INTO Contacts 
+        (name, subname, address, registration, phone, 
+        mobile, function, companies_id, pictures_id, active)
+                    values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
     dbs.execute_query(sql, data)
+
+
+def delete(item):
+    dbs.delete_query("Contacts", "id", item)
+
+
+def get_one(item):
+    result_query = dbs.select_one("Contacts", "id", item)
+    return result_query
+
+
+def update(data):
+    sql = """ UPDATE Contacts SET 
+    name= (?), subname= (?), address= (?), registration= (?), phone= (?), 
+    mobile= (?), function= (?), companies_id= (?), pictures_id= (?), active= (?)
+    WHERE id == (?) """
+    dbs.execute_query(sql, data)
+
+
+# Do not know on which parmater to search
+# def get_id(item):
+#     result_query = dbs.select_parameter("id", "Contacts", "name", item)
+#     return result_query
+
+
+def get_all():
+    result_query = dbs.select_all("Contacts")
+    return result_query
+
+
+def activate(item, value):
+    dbs.activate_query("Contacts", item, value)

@@ -28,24 +28,5 @@ def delete(item):
 
 
 def get(item):
-    sql = "SELECT id, filename, binary, filepath FROM Pictures WHERE id == (?)"
-    _result = dbs.execute_query(sql, (item,))
-    try:
-        return _result.fetchone()
-    except TypeError:
-        return None
-
-
-# do not use filename not unique or null
-# def ckeck(item):
-#     sql = "SELECT id FROM Pictures WHERE filename == (?)"
-#     _result = dbs.execute_query(sql, (item,))
-#     try:
-#         return _result.fetchone()[0]
-#     except TypeError:
-#         return None
-
-# there is no delete in pictures
-# def update(data):
-#     sql = """ UPDATE Pictures SET filename= (?), binary= (?), filepath= (?) WHERE id == (?) """
-#     dbs.execute_query(sql, data)
+    result_query = dbs.select_one("Pictures", "id", item)
+    return result_query
