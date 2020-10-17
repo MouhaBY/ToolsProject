@@ -4,8 +4,9 @@
 from src import databaseInit as dbi
 
 
-# application definition
 def main():
+
+    """ create database and initialise it by default data """
     dbi.initialise_database()
 
 
