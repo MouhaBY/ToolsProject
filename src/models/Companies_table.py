@@ -60,5 +60,5 @@ def get_all():
     return result_query
 
 
-def activate(item, value):
-    dbs.activate_query("Companies", item, value)
+def activate(data):
+    dbs.activate_query("Companies", data[0], data[1])

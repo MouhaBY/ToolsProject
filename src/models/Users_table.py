@@ -53,5 +53,5 @@ def get_all():
     return result_query
 
 
-def activate(item, value):
-    dbs.activate_query("Users", item, value)
+def activate(data):
+    dbs.activate_query("Users", data[0], data[1])

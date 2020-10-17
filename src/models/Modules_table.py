@@ -48,5 +48,5 @@ def get(item):
     return result_query
 
 
-def activate(item, value):
-    dbs.activate_query("Modules", item, value)
+def activate(data):
+    dbs.activate_query("Modules", data[0], data[1])

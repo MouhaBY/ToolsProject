@@ -62,5 +62,5 @@ def get_all():
     return result_query
 
 
-def activate(item, value):
-    dbs.activate_query("Contacts", item, value)
+def activate(data):
+    dbs.activate_query("Contacts", data[0], data[1])
