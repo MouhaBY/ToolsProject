@@ -27,15 +27,6 @@ def add(data):
     dbs.execute_query(sql, data)
 
 
-def delete(item):
-    dbs.delete_query("Users", "id", item)
-
-
-def get_one(item):
-    result_query = dbs.select_one("Users", "id", item)
-    return result_query
-
-
 def update(data):
     sql = """ UPDATE Users SET 
     username= (?), password= (?), email= (?), contact_id= (?), active= (?)
@@ -43,8 +34,17 @@ def update(data):
     dbs.execute_query(sql, data)
 
 
+def delete(item):
+    dbs.delete_query("Users", "id", item)
+
+
 def get_id(item):
     result_query = dbs.select_parameter("id", "Users", "username", item)
+    return result_query
+
+
+def get_one(item):
+    result_query = dbs.select_one("Users", "id", item)
     return result_query
 
 
