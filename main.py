@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from src import databaseInit as dbi
+from src.models import databaseinit as dbi
 
 
 def main():
