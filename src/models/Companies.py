@@ -47,10 +47,9 @@ class Company:
             raise mvc_exc.ParameterUnfilled
 
     def remove(self):
-        self.id = get_id(self.name)
-        if self.id is not None:
+        if get_one(self.id) is not None:
             delete(self.id)
-            if get_id(self.name) is None:
+            if get_id(self.id) is None:
                 return 1
             else:
                 raise mvc_exc.DeletionError
@@ -58,8 +57,7 @@ class Company:
             raise mvc_exc.ItemNotExist
 
     def activate(self, state):
-        self.id = get_id(self.name)
-        if self.id is not None:
+        if get_one(self.id) is not None:
             if state is not bool:
                 self.active = state
                 activate_sql(("active", self.id, state))
@@ -98,6 +96,9 @@ def init(data):
     obj_company = Company(data[0], data[1], data[2], data[3], data[4],
                           data[5], data[6], data[7], data[8], data[9], data[10])
     return obj_company
+
+
+""" DATABASE QUERIES TO MANIPULATE DATA """
 
 
 # Database Scripts

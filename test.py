@@ -31,14 +31,14 @@ if authentication.get_company_by_name("Company") is not None:
 else:
     print('NOK 5')
 
-new_company_id = authentication.create_new_company(("Companytested11", "Comp-001", "Tunisia", "TVA01", "00216phone",
-                                      "00216mobile", "www.company.com", "contact@company.com", None, 1))
+new_company_id = authentication.create_new_company((None, "Companytested11111d25", "Comp-001", "Tunisia", "TVA01", "00216phone",
+                                                    "00216mobile", "www.company.com", "contact@company.com", None, 1))
 if new_company_id is not None:
     print('OK')
 else:
     print('NOK')
 
-company_to_edit_id = authentication.edit_company(("Companytested1", "Comp-0011", "Tunisia", "TVA01", "00216phone",
+company_to_edit_id = authentication.edit_company((new_company_id,"Companytestedd255", "Comp-0011", "Tunisia", "TVA01", "00216phone",
                                       "00216mobile", "www.company.com", "contact@company.com", None, 1))
 
 if company_to_edit_id is not None:
@@ -46,11 +46,22 @@ if company_to_edit_id is not None:
 else:
     print('NOK')
 
+company_to_deactivate = authentication.deactivate_company((new_company_id,"Companytested1", "Comp-0011", "Tunisia", "TVA01", "00216phone",
+                                                            "00216mobile", "www.company.com", "contact@company.com", None, 1))
 
+if company_to_deactivate is not None:
+    print('OK')
+else:
+    print('NOK')
 
+company_to_remove = authentication.remove_company((new_company_id, "Companytested1", "Comp-0011", "Tunisia", "TVA01",
+                                                   "00216phone", "00216mobile", "www.company.com", "contact@company.com", None,
+                                                   1))
 
-
-
+if company_to_remove is not None:
+    print('OK')
+else:
+    print('NOK')
 
 
 # Create default data

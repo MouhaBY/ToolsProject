@@ -8,7 +8,7 @@ from src.models import Companies
 
 
 """ Pictures management to add into database 
-from contacts or companies and reading pictures from database """
+from contacts or companies and reading picture from database """
 
 
 # Pictures manipulating
@@ -27,13 +27,17 @@ def create_new_picture():
     filepath = ''
     binary = ''
     # Creating object and adding it
-    new_picture = Pictures.init((filename, filepath, binary))
+    new_picture = Pictures.init((None, filename, filepath, binary))
     try:
         new_picture.add()
         return new_picture.id
     except mvc_exc.InsertionError:
         # Vue needed to implement
         pass
+
+
+""" Companies management to add into database 
+from contacts or companies and reading companies from database """
 
 
 # Companies Manipulating
@@ -47,9 +51,9 @@ def get_all_companies():
 
 
 # """ Contacts management interface """
-def get_company_by_id(item):
+def get_company_by_id(id):
     try:
-        company_by_id = Companies.get_company(item)
+        company_by_id = Companies.get_company(id)
         return company_by_id
     except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
         # Vue needed to implement
@@ -57,9 +61,9 @@ def get_company_by_id(item):
 
 
 # """ Companies management interface """
-def get_company_by_name(item):
+def get_company_by_name(name):
     try:
-        company_by_name = Companies.get_company(item, "name")
+        company_by_name = Companies.get_company(name, "name")
         return company_by_name
     except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
         # Vue needed to implement
@@ -84,5 +88,38 @@ def edit_company(data):
         company_to_edit.edit()
         return company_to_edit.id
     except mvc_exc.ItemNotExist:
+        # Vue needed to implement
+        pass
+
+
+# remove existing company
+def remove_company(data):
+    company_to_remove = Companies.init(data)
+    try:
+        company_to_remove.remove()
+        return 1
+    except (mvc_exc.ItemNotExist, mvc_exc.DeletionError):
+        # Vue needed to implement
+        pass
+
+
+# deactivate existing company
+def deactivate_company(data):
+    company_to_deactivate = Companies.init(data)
+    try:
+        company_to_deactivate.activate(0)
+        return 1
+    except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
+        # Vue needed to implement
+        pass
+
+
+# activate existing company
+def activate_company(data):
+    company_to_deactivate = Companies.init(data)
+    try:
+        company_to_deactivate.activate(1)
+        return 1
+    except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
         # Vue needed to implement
         pass
