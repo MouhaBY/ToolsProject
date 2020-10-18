@@ -4,7 +4,7 @@
 from src.authentication import CompaniesManagement
 
 
-picture_id = CompaniesManagement.create_new_picture()
+CompaniesManagement.create_new_picture(company)
 
 if picture_id is not None:
     print('OK')

@@ -21,7 +21,7 @@ class Company:
         self.active = active
         # Determine company image
         # if self.pictures_id is not None:
-        #     self.picture = Pictures.get(self.pictures_id)
+        #      self.picture = get(self.pictures_id)
 
     def add(self):
         if get_id(self.name) is None:
@@ -58,7 +58,7 @@ class Company:
 
     def activate(self, state):
         if get_one(self.id) is not None:
-            if state is not bool:
+            if state is bool:
                 self.active = state
                 activate_sql(("active", self.id, state))
                 return 1
@@ -67,35 +67,34 @@ class Company:
         else:
             raise mvc_exc.ItemNotExist
 
-
-# Public methods
-def get_company(item, name=None):
-    if item is not None:
-        if name is not None:
-            item = get_id(item)
-        data = get_one(item)
-        if data is not None:
-            obj_company = Company(data[0], data[1], data[2], data[3], data[4],
-                                  data[5], data[6], data[7], data[8], data[9], data[10])
-            return obj_company
+    @staticmethod
+    def get_company(item, name=None):
+        if item is not None:
+            if name is not None:
+                item = get_id(item)
+            data = get_one(item)
+            if data is not None:
+                obj_company = Company(data[0], data[1], data[2], data[3], data[4],
+                                      data[5], data[6], data[7], data[8], data[9], data[10])
+                return obj_company
+            else:
+                raise mvc_exc.ItemNotExist
         else:
-            raise mvc_exc.ItemNotExist
-    else:
-        raise mvc_exc.ParameterUnfilled
+            raise mvc_exc.ParameterUnfilled
 
+    @staticmethod
+    def get_companies():
+        companies_list = get_all()
+        if companies_list is not None:
+            return companies_list
+        else:
+            raise mvc_exc.EmptyList
 
-def get_companies():
-    companies_list = get_all()
-    if companies_list is not None:
-        return companies_list
-    else:
-        raise mvc_exc.EmptyList
-
-
-def init(data):
-    obj_company = Company(data[0], data[1], data[2], data[3], data[4],
-                          data[5], data[6], data[7], data[8], data[9], data[10])
-    return obj_company
+    @staticmethod
+    def init(data):
+        obj_company = Company(data[0], data[1], data[2], data[3], data[4],
+                              data[5], data[6], data[7], data[8], data[9], data[10])
+        return obj_company
 
 
 """ DATABASE QUERIES TO MANIPULATE DATA """

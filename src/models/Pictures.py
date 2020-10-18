@@ -31,26 +31,27 @@ class Picture:
         else:
             raise mvc_exc.ItemNotExist
 
+    @staticmethod
+    def init(data):
+        obj_picture = Picture(data[0], data[1], data[2], data[3])
+        return obj_picture
 
-# Public Methods
-def init(data):
-    obj_picture = Picture(data[0], data[1], data[2], data[3])
-    return obj_picture
-
-
-def get(item):
-    if item is not None:
-        data = select(item)
-        if data is not None:
-            obj_picture = Picture(data[0], data[1], data[2], data[3])
-            return obj_picture
+    @staticmethod
+    def get(item):
+        if item is not None:
+            data = select(item)
+            if data is not None:
+                obj_picture = Picture(data[0], data[1], data[2], data[3])
+                return obj_picture
+            else:
+                raise mvc_exc.ItemNotExist
         else:
-            raise mvc_exc.ItemNotExist
-    else:
-        raise mvc_exc.ParameterUnfilled
+            raise mvc_exc.ParameterUnfilled
 
 
-# Database scripts
+""" Database scripts """
+
+
 def create():
     sql = """ 
     CREATE TABLE "Pictures" (
