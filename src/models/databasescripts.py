@@ -59,6 +59,15 @@ def select_one(table_name, reference, item):
         return None
 
 
+def select_two_conditions(table_name, reference1, item1, reference2, item2):
+    sql = 'SELECT * FROM {} WHERE {} == "{}" AND {} == "{}"'.format(table_name, reference1, item1,  reference2, item2)
+    _result = execute_query(sql)
+    try:
+        return _result.fetchone()
+    except TypeError:
+        return None
+
+
 def select_list(table_name, reference, item):
     sql = 'SELECT * FROM {} WHERE {} == "{}"'.format(table_name, reference, item)
     _result = execute_query(sql)
@@ -79,6 +88,11 @@ def select_all(table_name):
 
 def delete_query(table_name, reference, item):
     sql = 'DELETE FROM {} WHERE {} = "{}"'.format(table_name, reference, item)
+    execute_query(sql)
+
+
+def delete_two_conditions(table_name, reference1, item1, reference2, item2):
+    sql = 'DELETE FROM {} WHERE {} = "{}" AND {} = "{}"'.format(table_name, reference1, item1,  reference2, item2)
     execute_query(sql)
 
 

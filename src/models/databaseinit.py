@@ -8,9 +8,9 @@ import src.models.Companies as Companies_table
 import src.models.Users as Users_table
 import src.models.Pictures as Pictures
 import src.models.Profiles as Profiles_table
-import src.models.UsersProfiles_table as UsersProfiles_Table
+import src.models.UsersProfiles as UsersProfiles_Table
 import src.models.Modules as Modules_table
-import src.models.ProfilesModules_table as ProfilesModules_table
+import src.models.ProfilesModules as ProfilesModules_table
 import src.models.Actions as Actions_table
 import src.models.ActivityLog as ActivityLog_table
 
