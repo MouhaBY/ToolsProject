@@ -44,7 +44,7 @@ def get_picture_by_id(item):
 
 
 # when the user choose to edit or add new picture
-def create_new_picture(company):
+def create_new_picture():
     # Defining image storing functions
     filename = ''
     filepath = ''
@@ -53,7 +53,7 @@ def create_new_picture(company):
     new_picture = Pictures.Picture.init((None, filename, filepath, binary))
     try:
         new_picture.add()
-        company.picture_id = new_picture.id
+        return new_picture.id
         # Vue changing photo done
     except mvc_exc.InsertionError:
         # Vue needed to implement
