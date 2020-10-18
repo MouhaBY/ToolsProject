@@ -57,7 +57,7 @@ def create():
     CREATE TABLE "Pictures" (
     "id" INTEGER NOT NULL,
     "filename" TEXT,
-    "binary" TEXT,
+    "binary" BLOB,
     "filepath"	TEXT,
     PRIMARY KEY("id" AUTOINCREMENT)
     );

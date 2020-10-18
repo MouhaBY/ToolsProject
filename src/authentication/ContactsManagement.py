@@ -43,14 +43,21 @@ def get_picture_by_id(item):
         pass
 
 
+# Convert digital data to binary format
+def convertToBinaryData(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        binary_data = file.read()
+    return binary_data
+
+
 # when the user choose to edit or add new picture
 def create_new_picture():
     # Defining image storing functions
     filename = ''
-    filepath = ''
-    binary = ''
+    binary = convertToBinaryData(filename)
     # Creating object and adding it
-    new_picture = Pictures.Picture.init((None, filename, filepath, binary))
+    new_picture = Pictures.Picture.init((None, None, None, binary))
     try:
         new_picture.add()
         return new_picture.id
