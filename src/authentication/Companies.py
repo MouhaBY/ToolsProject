@@ -18,14 +18,14 @@ class Company:
         self.mail = mail
         self.pictures_id = pictures_id
         self.active = active
-        # # Determine company image
-        # if self.pictures_id is not None:
-        #     self.picture = Pictures.get(self.pictures_id)
+        # Determine company image
+        if self.pictures_id is not None:
+            self.picture = Pictures.get(self.pictures_id)
 
     def add(self):
         if Companies_table.get_id(self.name) is None:
-            Companies_table.add((self.name, self.code, self.address, self.registration, self.phone, self.mobile,
-                                 self.website, self.mail, self.pictures_id, self.active))
+            Companies_table.add((self.name, self.code, self.address, self.registration, self.phone,
+                                 self.mobile,self.website, self.mail, self.pictures_id, self.active))
             self.id = Companies_table.get_id(self.name)
             if self.id is not None:
                 return 1
@@ -34,7 +34,8 @@ class Company:
         self.id = Companies_table.get_id(self.name)
         if self.id is not None:
             Companies_table.delete(self.id)
-            return 1
+            if Companies_table.get_id(self.name) is None:
+                return 1
 
     def update(self):
         self.id = Companies_table.get_id(self.name)
@@ -65,6 +66,5 @@ def get_companies():
 
 
 def init(data):
-    obj_company = Company(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9],
-                              data[10])
+    obj_company = Company(None, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9])
     return obj_company

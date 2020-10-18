@@ -20,7 +20,8 @@ class Picture:
         data = Pictures_table.read(self.id)
         if data is not None:
             Pictures_table.delete(self.id)
-            return 1
+            if Pictures_table.read(self.id) is None:
+                return 1
 
 
 def get(item):
@@ -31,5 +32,5 @@ def get(item):
 
 
 def init(data):
-    obj_picture = Picture(data[0], data[1], data[2], data[3])
+    obj_picture = Picture(None, data[0], data[1], data[2])
     return obj_picture
