@@ -21,8 +21,8 @@ def initialise_database():
     dbs.create_connection()
 
     # Create Tables
-    Pictures.create()
-    Companies_table.create()
+    Pictures.Picture.create()
+    Companies_table.Company.create()
     Contacts_table.create()
     Users_table.create()
     Profiles_table.create()

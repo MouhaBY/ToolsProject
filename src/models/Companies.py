@@ -19,15 +19,12 @@ class Company:
         self.mail = mail
         self.pictures_id = pictures_id
         self.active = active
-        # Determine company image
-        # if self.pictures_id is not None:
-        #      self.picture = get(self.pictures_id)
 
     def add(self):
-        if get_id(self.name) is None:
-            insert((self.name, self.code, self.address, self.registration, self.phone,
-                    self.mobile, self.website, self.mail, self.pictures_id, self.active))
-            self.id = get_id(self.name)
+        if Company.__select_one(self.name) is None:
+            Company.__insert((self.name, self.code, self.address, self.registration, self.phone,
+                              self.mobile, self.website, self.mail, self.pictures_id, self.active))
+            self.id = Company.__select_one(self.name)
             if self.id is not None:
                 return 1
             else:
@@ -37,9 +34,9 @@ class Company:
 
     def edit(self):
         if self.id is not None:
-            if get_one(self.id) is not None:
-                update((self.name, self.code, self.address, self.registration, self.phone,
-                        self.mobile, self.website, self.mail, self.pictures_id, self.active, self.id))
+            if Company.__select_one(self.id) is not None:
+                Company.__update((self.name, self.code, self.address, self.registration, self.phone,
+                                  self.mobile, self.website, self.mail, self.pictures_id, self.active, self.id))
                 return 1
             else:
                 raise mvc_exc.ItemNotExist
@@ -47,9 +44,9 @@ class Company:
             raise mvc_exc.ParameterUnfilled
 
     def remove(self):
-        if get_one(self.id) is not None:
-            delete(self.id)
-            if get_one(self.id) is None:
+        if Company.__select_one(self.id) is not None:
+            Company.__delete(self.id)
+            if Company.__select_one(self.id) is None:
                 return 1
             else:
                 raise mvc_exc.DeletionError
@@ -57,10 +54,10 @@ class Company:
             raise mvc_exc.ItemNotExist
 
     def activate(self, state):
-        if get_one(self.id) is not None:
+        if Company.__select_one(self.id) is not None:
             if state is bool:
                 self.active = state
-                activate_sql(("active", self.id, state))
+                Company.__activate_sql(("active", self.id, state))
                 return 1
             else:
                 raise mvc_exc.ParameterUnfilled
@@ -68,11 +65,11 @@ class Company:
             raise mvc_exc.ItemNotExist
 
     @staticmethod
-    def get_company(item, name=None):
-        if item is not None:
+    def get_company(id, name=None):
+        if id is not None:
             if name is not None:
-                item = get_id(item)
-            data = get_one(item)
+                id = Company.__select_id_by_name(id)
+            data = Company.__select_one(id)
             if data is not None:
                 obj_company = Company(data[0], data[1], data[2], data[3], data[4],
                                       data[5], data[6], data[7], data[8], data[9], data[10])
@@ -84,7 +81,7 @@ class Company:
 
     @staticmethod
     def get_companies():
-        companies_list = get_all()
+        companies_list = Company.__select_all()
         if companies_list is not None:
             return companies_list
         else:
@@ -96,65 +93,62 @@ class Company:
                               data[5], data[6], data[7], data[8], data[9], data[10])
         return obj_company
 
+    @staticmethod
+    def create():
+        sql = """ 
+        CREATE TABLE "Companies" (
+        "id" INTEGER NOT NULL, 
+        "name" TEXT NOT NULL UNIQUE,
+        "code" TEXT,
+        "address" TEXT, 
+        "registration" TEXT,
+        "phone" TEXT,
+        "mobile" TEXT,
+        "website" TEXT,
+        "mail" TEXT,
+        "pictures_id" INTEGER,
+        "active" BOOLEAN DEFAULT 'True',
+        FOREIGN KEY("pictures_id") REFERENCES "Pictures"("id"),
+        PRIMARY KEY("id" AUTOINCREMENT)
+        );
+        """
+        dbs.execute_query(sql)
 
-""" DATABASE QUERIES TO MANIPULATE DATA """
+    # Database Scripts
+    @staticmethod
+    def __insert(data):
+        sql = """ 
+        INSERT INTO Companies (name, code, address, registration, phone, mobile, website, mail, pictures_id, active)
+                    values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
+        dbs.execute_query(sql, data)
 
+    @staticmethod
+    def __delete(item):
+        dbs.delete_query("Companies", "id", item)
 
-# Database Scripts
-def create():
-    sql = """ 
-    CREATE TABLE "Companies" (
-    "id" INTEGER NOT NULL, 
-    "name" TEXT NOT NULL UNIQUE,
-    "code" TEXT,
-    "address" TEXT, 
-    "registration" TEXT,
-    "phone" TEXT,
-    "mobile" TEXT,
-    "website" TEXT,
-    "mail" TEXT,
-    "pictures_id" INTEGER,
-    "active" BOOLEAN DEFAULT 'True',
-    FOREIGN KEY("pictures_id") REFERENCES "Pictures"("id"),
-    PRIMARY KEY("id" AUTOINCREMENT)
-    );
-    """
-    dbs.execute_query(sql)
+    @staticmethod
+    def __select_one(item):
+        result_query = dbs.select_one("Companies", "id", item)
+        return result_query
 
+    @staticmethod
+    def __update(data):
+        sql = """ UPDATE Companies SET 
+        name= (?), code= (?), address= (?), registration= (?), phone= (?), mobile= (?), website= (?), mail= (?), 
+        pictures_id= (?), active= (?)
+        WHERE id == (?) """
+        dbs.execute_query(sql, data)
 
-def insert(data):
-    sql = """ 
-    INSERT INTO Companies (name, code, address, registration, phone, mobile, website, mail, pictures_id, active)
-                values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
-    dbs.execute_query(sql, data)
+    @staticmethod
+    def __select_id_by_name(item):
+        result_query = dbs.select_parameter("id", "Companies", "name", item)
+        return result_query
 
+    @staticmethod
+    def __select_all():
+        result_query = dbs.select_all("Companies")
+        return result_query
 
-def delete(item):
-    dbs.delete_query("Companies", "id", item)
-
-
-def get_one(item):
-    result_query = dbs.select_one("Companies", "id", item)
-    return result_query
-
-
-def update(data):
-    sql = """ UPDATE Companies SET 
-    name= (?), code= (?), address= (?), registration= (?), phone= (?), mobile= (?), website= (?), mail= (?), 
-    pictures_id= (?), active= (?)
-    WHERE id == (?) """
-    dbs.execute_query(sql, data)
-
-
-def get_id(item):
-    result_query = dbs.select_parameter("id", "Companies", "name", item)
-    return result_query
-
-
-def get_all():
-    result_query = dbs.select_all("Companies")
-    return result_query
-
-
-def activate_sql(data):
-    dbs.activate_query("Companies", data[0], data[1])
+    @staticmethod
+    def __activate_sql(data):
+        dbs.activate_query("Companies", data[0], data[1])
