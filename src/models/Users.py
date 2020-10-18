@@ -16,10 +16,10 @@ class User:
         self.active = active
 
     def add(self):
-        if get_id("username", self.username) is None:
-            if get_id("email", self.email) is None:
-                insert((self.username, self.password, self.email, self.contact_id, self.active))
-                self.id = get_id("username", self.username)
+        if User.__get_id_by_reference("username", self.username) is None:
+            if User.__get_id_by_reference("email", self.email) is None:
+                User.__insert((self.username, self.password, self.email, self.contact_id, self.active))
+                self.id = User.__get_id_by_reference("username", self.username)
                 if self.id is not None:
                     return 1
                 else:
@@ -31,8 +31,8 @@ class User:
 
     def edit(self):
         if self.id is not None:
-            if get_one(self.id) is not None:
-                update((self.username, self.password, self.email, self.contact_id, self.active, self.id))
+            if User.__select_one(self.id) is not None:
+                User.__update((self.username, self.password, self.email, self.contact_id, self.active, self.id))
                 return 1
             else:
                 raise mvc_exc.ItemNotExist
@@ -40,9 +40,10 @@ class User:
             raise mvc_exc.ParameterUnfilled
 
     def remove(self):
-        if get_one(self.id) is not None:
-            delete(self.id)
-            if get_one(self.id) is None:
+        if User.__select_one(self.id) is not None:
+            dbs.delete_query("Users_Profiles", "users_id", self.id)
+            dbs.delete_query("Users", "id", self.id)
+            if User.__select_one(self.id) is None:
                 return 1
             else:
                 raise mvc_exc.DeletionError
@@ -50,10 +51,10 @@ class User:
             raise mvc_exc.ItemNotExist
 
     def activate(self, state):
-        if get_one(self.id) is not None:
+        if User.__select_one(self.id) is not None:
             if state is bool:
                 self.active = state
-                activate_sql(("active", self.id, state))
+                dbs.activate_query("Users", state, self.id)
                 return 1
             else:
                 raise mvc_exc.ParameterUnfilled
@@ -64,8 +65,8 @@ class User:
     def get_user(item, username=None):
         if item is not None:
             if username is not None:
-                item = get_id("username", item)
-            data = get_one(item)
+                item = User.__get_id_by_reference("username", item)
+            data = User.__select_one(item)
             if data is not None:
                 obj_user = User(data[0], data[1], data[2], data[3], data[4], data[5])
                 return obj_user
@@ -76,7 +77,7 @@ class User:
 
     @staticmethod
     def get_users():
-        users_list = get_all()
+        users_list = dbs.select_all("Users")
         if users_list is not None:
             return users_list
         else:
@@ -87,57 +88,42 @@ class User:
         obj_user = User(data[0], data[1], data[2], data[3], data[4], data[5])
         return obj_user
 
+    # """ database scripts """
+    @staticmethod
+    def create():
+        sql = """ 
+        CREATE TABLE "Users" (
+        "id" INTEGER NOT NULL,
+        "username" TEXT NOT NULL UNIQUE,
+        "password" TEXT NOT NULL,
+        "email" TEXT,
+        "contact_id" INTEGER,
+        "active" BOOLEAN DEFAULT 'True',
+        FOREIGN KEY("contact_id") REFERENCES "Contacts"("id"),
+        PRIMARY KEY("id" AUTOINCREMENT)
+        );
+        """
+        dbs.execute_query(sql)
 
-""" database scripts """
+    @staticmethod
+    def __insert(data):
+        sql = """ INSERT INTO Users (username, password, email, contact_id, active)
+                        values(?, ?, ?, ?, ?) """
+        dbs.execute_query(sql, data)
 
+    @staticmethod
+    def __update(data):
+        sql = """ UPDATE Users SET 
+        username= (?), password= (?), email= (?), contact_id= (?), active= (?)
+        WHERE id == (?) """
+        dbs.execute_query(sql, data)
 
-def create():
-    sql = """ 
-    CREATE TABLE "Users" (
-    "id" INTEGER NOT NULL,
-    "username" TEXT NOT NULL UNIQUE,
-    "password" TEXT NOT NULL,
-    "email" TEXT,
-    "contact_id" INTEGER,
-    "active" BOOLEAN DEFAULT 'True',
-    FOREIGN KEY("contact_id") REFERENCES "Contacts"("id"),
-    PRIMARY KEY("id" AUTOINCREMENT)
-    );
-    """
-    dbs.execute_query(sql)
+    @staticmethod
+    def __get_id_by_reference(reference, item):
+        result_query = dbs.select_parameter("id", "Users", reference, item)
+        return result_query
 
-
-def insert(data):
-    sql = """ INSERT INTO Users (username, password, email, contact_id, active)
-                    values(?, ?, ?, ?, ?) """
-    dbs.execute_query(sql, data)
-
-
-def update(data):
-    sql = """ UPDATE Users SET 
-    username= (?), password= (?), email= (?), contact_id= (?), active= (?)
-    WHERE id == (?) """
-    dbs.execute_query(sql, data)
-
-
-def delete(item):
-    dbs.delete_query("Users", "id", item)
-
-
-def get_id(reference, item):
-    result_query = dbs.select_parameter("id", "Users", reference, item)
-    return result_query
-
-
-def get_one(item):
-    result_query = dbs.select_one("Users", "id", item)
-    return result_query
-
-
-def get_all():
-    result_query = dbs.select_all("Users")
-    return result_query
-
-
-def activate_sql(data):
-    dbs.activate_query("Users", data[0], data[1])
+    @staticmethod
+    def __select_one(item):
+        result_query = dbs.select_one("Users", "id", item)
+        return result_query

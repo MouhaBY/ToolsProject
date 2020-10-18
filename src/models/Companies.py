@@ -45,7 +45,7 @@ class Company:
 
     def remove(self):
         if Company.__select_one(self.id) is not None:
-            Company.__delete(self.id)
+            dbs.delete_query("Companies", "id", self.id)
             if Company.__select_one(self.id) is None:
                 return 1
             else:
@@ -57,7 +57,7 @@ class Company:
         if Company.__select_one(self.id) is not None:
             if state is bool:
                 self.active = state
-                Company.__activate_sql(("active", self.id, state))
+                dbs.activate_query("Companies", state, self.id)
                 return 1
             else:
                 raise mvc_exc.ParameterUnfilled
@@ -81,7 +81,7 @@ class Company:
 
     @staticmethod
     def get_companies():
-        companies_list = Company.__select_all()
+        companies_list = dbs.select_all("Companies")
         if companies_list is not None:
             return companies_list
         else:
@@ -123,10 +123,6 @@ class Company:
         dbs.execute_query(sql, data)
 
     @staticmethod
-    def __delete(item):
-        dbs.delete_query("Companies", "id", item)
-
-    @staticmethod
     def __select_one(item):
         result_query = dbs.select_one("Companies", "id", item)
         return result_query
@@ -143,12 +139,3 @@ class Company:
     def __select_id_by_name(item):
         result_query = dbs.select_parameter("id", "Companies", "name", item)
         return result_query
-
-    @staticmethod
-    def __select_all():
-        result_query = dbs.select_all("Companies")
-        return result_query
-
-    @staticmethod
-    def __activate_sql(data):
-        dbs.activate_query("Companies", data[0], data[1])

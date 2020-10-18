@@ -1,6 +1,10 @@
 # #! /usr/bin/env python3
 # # coding: utf-8
-#
+
+# from src.authentication import CompaniesManagement
+# CompaniesManagement.create_new_picture()
+
+
 # from src.authentication import CompaniesManagement
 #
 #
@@ -58,7 +62,10 @@
 # else:
 #     print('NOK')
 #
-#
+
+
+
+
 # # Create default data
 #
 # # Pictures_table.add(("filename", "0XDHFRE", "C:"))

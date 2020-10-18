@@ -14,12 +14,12 @@ class ActivityLog:
         self.date = date
 
     def add(self):
-        insert((self.users_id, self.users_username, self.actions_id, self.date))
+        ActivityLog.__insert((self.users_id, self.users_username, self.actions_id, self.date))
 
     @staticmethod
     def get_activities_list(item):
         if item is not None:
-            data = get_list(item)
+            data = dbs.select_list("ActivityLog", "users_id", item)
             if data is not None:
                 return data
             else:
@@ -29,7 +29,7 @@ class ActivityLog:
 
     @staticmethod
     def get_activities():
-        activities_list = get_all()
+        activities_list = dbs.select_all("ActivityLog")
         if activities_list is not None:
             return activities_list
         else:
@@ -40,34 +40,22 @@ class ActivityLog:
         obj_activity = ActivityLog(data[0], data[1], data[2], data[3])
         return obj_activity
 
+    # """ Database Scripts """
+    @staticmethod
+    def create():
+        sql = """ 
+        CREATE TABLE "ActivityLog" (
+        "users_id"	INTEGER NOT NULL,
+        "users_username" TEXT NOT NULL,
+        "actions_id" INTEGER NOT NULL,
+        "descriptions" TEXT,
+        "date" TEXT NOT NULL
+        );
+        """
+        dbs.execute_query(sql)
 
-""" Database Scripts """
-
-
-def create():
-    sql = """ 
-    CREATE TABLE "ActivityLog" (
-    "users_id"	INTEGER NOT NULL,
-    "users_username" TEXT NOT NULL,
-    "actions_id" INTEGER NOT NULL,
-    "descriptions" TEXT,
-    "date" TEXT NOT NULL
-    );
-    """
-    dbs.execute_query(sql)
-
-
-def insert(data):
-    sql = """ INSERT INTO ActivityLog (users_id, users_username, actions_id, descriptions, date) 
-    values(?, ?, ?, ?, ?); """
-    dbs.execute_query(sql, data)
-
-
-def get_all():
-    result_query = dbs.select_all("ActivityLog")
-    return result_query
-
-
-def get_list(item):
-    result_query = dbs.select_list("ActivityLog", "users_id", item)
-    return result_query
+    @staticmethod
+    def __insert(data):
+        sql = """ INSERT INTO ActivityLog (users_id, users_username, actions_id, descriptions, date) 
+        values(?, ?, ?, ?, ?); """
+        dbs.execute_query(sql, data)

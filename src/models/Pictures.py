@@ -23,7 +23,7 @@ class Picture:
     def remove(self):
         data = Picture.__select(self.id)
         if data is not None:
-            Picture.__delete(self.id)
+            dbs.delete_query("Pictures", "id", self.id)
             if Picture.__select(self.id) is None:
                 return 1
             else:
@@ -79,7 +79,3 @@ class Picture:
     def __select(item):
         result_query = dbs.select_one("Pictures", "id", item)
         return result_query
-
-    @staticmethod
-    def __delete(item):
-        dbs.delete_query("Pictures", "id", item)
