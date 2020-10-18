@@ -49,7 +49,7 @@ class Company:
     def remove(self):
         if get_one(self.id) is not None:
             delete(self.id)
-            if get_id(self.id) is None:
+            if get_one(self.id) is None:
                 return 1
             else:
                 raise mvc_exc.DeletionError

@@ -20,7 +20,7 @@ def get_all_contacts():
         pass
 
 
-""" User show one company in a new view """
+""" User show one contact in a new view """
 
 
 def get_contact_by_id(id):

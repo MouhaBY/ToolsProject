@@ -5,7 +5,7 @@ import src.models.databasescripts as dbs
 
 import src.models.Contacts as Contacts_table
 import src.models.Companies as Companies_table
-import src.models.Users_table as Users_table
+import src.models.Users as Users_table
 import src.models.Pictures as Pictures
 import src.models.Profiles_table as Profiles_table
 import src.models.UsersProfiles_table as UsersProfiles_Table
