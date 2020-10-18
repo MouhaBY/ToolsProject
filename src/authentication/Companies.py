@@ -25,7 +25,7 @@ class Company:
     def add(self):
         if Companies_table.get_id(self.name) is None:
             Companies_table.add((self.name, self.code, self.address, self.registration, self.phone,
-                                 self.mobile,self.website, self.mail, self.pictures_id, self.active))
+                                 self.mobile, self.website, self.mail, self.pictures_id, self.active))
             self.id = Companies_table.get_id(self.name)
             if self.id is not None:
                 return 1
@@ -40,31 +40,32 @@ class Company:
     def update(self):
         self.id = Companies_table.get_id(self.name)
         if self.id is not None:
-            Companies_table.update((self.name, self.code, self.address, self.registration, self.phone, self.mobile,
-                                    self.website, self.mail, self.pictures_id, self.active, self.id))
+            Companies_table.update((self.name, self.code, self.address, self.registration, self.phone,
+                                    self.mobile, self.website, self.mail, self.pictures_id, self.active, self.id))
             return 1
 
-    def activate(self,state):
+    def activate(self, state):
         self.id = Companies_table.get_id(self.name)
         if self.id is not None:
-            self.active=state
-            Companies_table.activate(("active",self.id, state))
+            self.active = state
+            Companies_table.activate(("active", self.id, state))
             return 1
 
 
 def get_company(item):
     data = Companies_table.get_one(item)
     if data is not None:
-        obj_company = Company(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9],
-                              data[10])
+        obj_company = Company(data[0], data[1], data[2], data[3], data[4],
+                              data[5], data[6], data[7], data[8], data[9],data[10])
         return obj_company
 
 
 def get_companies():
-    data_list = Companies_table.get_all()
-    return data_list
+    companies_list = Companies_table.get_all()
+    return companies_list
 
 
 def init(data):
-    obj_company = Company(None, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9])
+    obj_company = Company(None, data[0], data[1], data[2], data[3], data[4],
+                          data[5], data[6], data[7], data[8], data[9])
     return obj_company

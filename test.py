@@ -5,7 +5,7 @@ from src.authentication import Pictures
 from src.authentication import Companies
 
 # # create obj picture
-# P = Pictures.init((None,'Image1',"Oxd",None))
+# P = Pictures.init(('Image1',"Oxd",None))
 # if P.id is None:
 #     print("OK 1/4")
 # result = P.delete()
@@ -19,16 +19,27 @@ from src.authentication import Companies
 #     print("OK 4/4")
 
 # Create Object Company
-C = Companies.init(("Company2", "Comp-001", "Tunisia", "TVA01", "00216phone", "00216mobile", "www.company.com", "contact@company.com", None, 1))
-if C.id is None:
-     print("OK 1/4")
-if not C.delete():
-    print("OK 2/4")
+# C = Companies.init(("Company2", "Comp-001", "Tunisia", "TVA01", "00216phone", "00216mobile", "www.company.com", "contact@company.com", None, 1))
+# if C.id is None:
+#      print("OK 1/4")
+# if not C.delete():
+#     print("OK 2/4")
+# C.add()
+# if C.id is not None:
+#     print("OK 3/4")
+# if C.delete():
+#     print("OK 4/4")
+
+
+# Test complete
+P = Pictures.init(('Image112',"Oxd",None))
+P.add()
+pict_id = P.id
+C = Companies.init(("Company223", "Comp-001", "Tunisia", "TVA01", "00216phone", "00216mobile", "www.company.com", "contact@company.com", pict_id, 1))
 C.add()
-if C.id is not None:
-    print("OK 3/4")
-if C.delete():
-    print("OK 4/4")
+C.delete()
+P.delete()
+
 
 # Create default data
 
