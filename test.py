@@ -1,44 +1,56 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from src.authentication import Pictures
-from src.authentication import Companies
-
-# # create obj picture
-# P = Pictures.init(('Image1',"Oxd",None))
-# if P.id is None:
-#     print("OK 1/4")
-# result = P.delete()
-# if result is None:
-#     print("OK 2/4")
-# P.add()
-# if P.id is not None:
-#     print("OK 3/4")
-# result = P.delete()
-# if result ==1:
-#     print("OK 4/4")
-
-# Create Object Company
-# C = Companies.init(("Company2", "Comp-001", "Tunisia", "TVA01", "00216phone", "00216mobile", "www.company.com", "contact@company.com", None, 1))
-# if C.id is None:
-#      print("OK 1/4")
-# if not C.delete():
-#     print("OK 2/4")
-# C.add()
-# if C.id is not None:
-#     print("OK 3/4")
-# if C.delete():
-#     print("OK 4/4")
+from src.authentication import authentication
 
 
-# Test complete
-P = Pictures.init(('Image112',"Oxd",None))
-P.add()
-pict_id = P.id
-C = Companies.init(("Company223", "Comp-001", "Tunisia", "TVA01", "00216phone", "00216mobile", "www.company.com", "contact@company.com", pict_id, 1))
-C.add()
-C.delete()
-P.delete()
+picture_id = authentication.create_new_picture()
+
+if picture_id is not None:
+    print('OK')
+else:
+    print('NOK')
+
+if authentication.get_picture_by_id(picture_id) is not None:
+    print('OK')
+else:
+    print('NOK')
+
+if authentication.get_all_companies() is not None:
+    print('OK')
+else:
+    print('NOK')
+
+if authentication.get_company_by_id("1") is not None:
+    print('OK')
+else:
+    print('NOK')
+
+if authentication.get_company_by_name("Company") is not None:
+    print('OK 5')
+else:
+    print('NOK 5')
+
+new_company_id = authentication.create_new_company(("Companytested11", "Comp-001", "Tunisia", "TVA01", "00216phone",
+                                      "00216mobile", "www.company.com", "contact@company.com", None, 1))
+if new_company_id is not None:
+    print('OK')
+else:
+    print('NOK')
+
+company_to_edit_id = authentication.edit_company(("Companytested1", "Comp-0011", "Tunisia", "TVA01", "00216phone",
+                                      "00216mobile", "www.company.com", "contact@company.com", None, 1))
+
+if company_to_edit_id is not None:
+    print('OK')
+else:
+    print('NOK')
+
+
+
+
+
+
 
 
 # Create default data

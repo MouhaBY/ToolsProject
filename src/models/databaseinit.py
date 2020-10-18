@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-import src.models.databaseScripts as dbs
+import src.models.databasescripts as dbs
 
 import src.models.Contacts_table as Contacts_table
-import src.models.Companies_table as Companies_table
+import src.models.Companies as Companies_table
 import src.models.Users_table as Users_table
-import src.models.Pictures_table as Pictures_table
+import src.models.Pictures as Pictures
 import src.models.Profiles_table as Profiles_table
 import src.models.UsersProfiles_table as UsersProfiles_Table
 import src.models.Modules_table as Modules_table
@@ -21,7 +21,7 @@ def initialise_database():
     dbs.create_connection()
 
     # Create Tables
-    Pictures_table.create()
+    Pictures.create()
     Companies_table.create()
     Contacts_table.create()
     Users_table.create()

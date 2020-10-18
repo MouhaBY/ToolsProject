@@ -2,7 +2,7 @@
 # coding: utf-8
 
 
-import src.models.databaseScripts as dbs
+import src.models.databasescripts as dbs
 
 
 def create():
