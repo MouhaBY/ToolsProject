@@ -131,6 +131,47 @@ def insert_picture(data):
     execute_query(sql, data)
 
 
+""" Companies """
+
+
+def create_table_company():
+    sql = """ 
+    CREATE TABLE "Companies" (
+    "id" INTEGER NOT NULL, 
+    "name" TEXT NOT NULL UNIQUE,
+    "code" TEXT,
+    "address" TEXT, 
+    "registration" TEXT,
+    "phone" TEXT,
+    "mobile" TEXT,
+    "website" TEXT,
+    "mail" TEXT,
+    "pictures_id" INTEGER,
+    "active" BOOLEAN DEFAULT 'True',
+    FOREIGN KEY("pictures_id") REFERENCES "Pictures"("id"),
+    PRIMARY KEY("id" AUTOINCREMENT)
+    );
+    """
+    execute_query(sql)
+
+
+# Database Scripts
+@staticmethod
+def __insert_company(data):
+    sql = """ 
+    INSERT INTO Companies (name, code, address, registration, phone, mobile, website, mail, pictures_id, active)
+                values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
+    execute_query(sql, data)
+
+
+def __update_company(data):
+    sql = """ UPDATE Companies SET 
+    name= (?), code= (?), address= (?), registration= (?), phone= (?), mobile= (?), website= (?), mail= (?), 
+    pictures_id= (?), active= (?)
+    WHERE id == (?) """
+    execute_query(sql, data)
+
+
 def main():
     pass
 

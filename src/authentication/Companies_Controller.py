@@ -4,7 +4,7 @@
 import src.mvc_exceptions as mvc_exc
 
 from src.models import Pictures_model
-from src.models import Companies
+from src.models import Companies_model
 from src.services import Pictures_services
 
 
@@ -14,7 +14,7 @@ from src.services import Pictures_services
 
 def get_all_companies():
     try:
-        companies_list = Companies.Company.get_companies()
+        companies_list = Companies_model.Company.get_companies()
         # Vue all companies datatable
     except mvc_exc.EmptyList:
         # Vue no element found
@@ -26,7 +26,7 @@ def get_all_companies():
 
 def get_company_by_name(name):
     try:
-        company_by_name = Companies.Company.get_company(name, "name")
+        company_by_name = Companies_model.Company.get_company(name, "name")
         get_picture_by_id(company_by_name.pictures_id)
         # Vue company details
     except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
@@ -66,7 +66,7 @@ def create_new_picture():
 
 # edit existing company
 def edit_company(data):
-    company_to_edit = Companies.Company.init(data)
+    company_to_edit = Companies_model.Company.init(data)
     try:
         company_to_edit.edit()
         # Show view of saving data successfully and return to previous view
@@ -79,7 +79,7 @@ def edit_company(data):
 
 
 def remove_company(data):
-    company_to_remove = Companies.Company.init(data)
+    company_to_remove = Companies_model.Company.init(data)
     try:
         company_to_remove.remove()
         # vue of removing successfully and return to previous view
@@ -93,7 +93,7 @@ def remove_company(data):
 
 # deactivate existing company
 def deactivate_company(data):
-    company_to_deactivate = Companies.Company.init(data)
+    company_to_deactivate = Companies_model.Company.init(data)
     try:
         company_to_deactivate.activate(0)
         return 1
@@ -104,7 +104,7 @@ def deactivate_company(data):
 
 # activate existing company
 def activate_company(data):
-    company_to_activate = Companies.Company.init(data)
+    company_to_activate = Companies_model.Company.init(data)
     try:
         company_to_activate.activate(1)
         return 1
@@ -120,7 +120,7 @@ def activate_company(data):
 
 # user saves the data
 def create_new_company(data):
-    new_company = Companies.Company.init(data)
+    new_company = Companies_model.Company.init(data)
     try:
         new_company.add()
         # show view of saving data successfully
