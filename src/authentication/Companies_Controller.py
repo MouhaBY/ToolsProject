@@ -3,8 +3,9 @@
 
 import src.mvc_exceptions as mvc_exc
 
-from src.models import Pictures
+from src.models import Pictures_model
 from src.models import Companies
+from src.services import Pictures_services
 
 
 """ Companies management menu """
@@ -34,10 +35,10 @@ def get_company_by_name(name):
 
 
 # show image related to the  company, this is included in the get company method
-def get_picture_by_id(item):
+def get_picture_by_id(id):
     try:
-        picture_by_id = Pictures.Picture.get(item)
-        # show image in company details
+        picture = Pictures_services.read(id)
+        # show image in company details : picture.binary
     except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
         # Vue no image found
         pass
@@ -50,7 +51,7 @@ def create_new_picture():
     filepath = ''
     binary = ''
     # Creating object and adding it
-    new_picture = Pictures.Picture.init((None, filename, filepath, binary))
+    new_picture = Pictures_model.Picture.init((None, filename, filepath, binary))
     try:
         new_picture.add()
         return new_picture.id

@@ -2,7 +2,7 @@
 # coding: utf-8
 
 
-import src.models.databasescripts as dbs
+import src.scripts.databasescripts as dbs
 import src.mvc_exceptions as mvc_exc
 
 

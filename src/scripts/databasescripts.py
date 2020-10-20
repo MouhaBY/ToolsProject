@@ -101,6 +101,36 @@ def activate_query(table_name, item, value):
     execute_query(sql)
 
 
+def select_max_id(table_name):
+    sql = 'SELECT MAX(id) FROM {}'.format(table_name)
+    _result = execute_query(sql)
+    try:
+        return _result.fetchone()[0]
+    except TypeError:
+        return None
+
+
+""" Pictures"""
+
+
+def create_pictures_table():
+    sql = """ 
+    CREATE TABLE "Pictures" (
+    "id" INTEGER NOT NULL,
+    "filename" TEXT,
+    "binary" BLOB,
+    "filepath"	TEXT,
+    PRIMARY KEY("id" AUTOINCREMENT)
+    );
+    """
+    execute_query(sql)
+
+
+def insert_picture(data):
+    sql = """ INSERT INTO Pictures (filename, binary, filepath) values(?, ?, ?); """
+    execute_query(sql, data)
+
+
 def main():
     pass
 
