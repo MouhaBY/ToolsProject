@@ -13,24 +13,7 @@ class PicturesServices(object):
         """
         Initializes session and creating tables.
         """
-        # engine = create ..??
-        # self.session = session_factory(bind=engine)
         Pictures.Base.metadata.create_all(engine)
-        # session = session_factory(engine)
-
-    @staticmethod
-    def create(data):
-        session = session_factory()
-        current_obj = Picture(data[0], data[1], data[2])
-        try:
-            session.add(current_obj)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-        return current_obj
 
     @staticmethod
     def read(item_id):
@@ -46,3 +29,23 @@ class PicturesServices(object):
             return current_obj
         else:
             raise mvc_exc.ItemNotExist
+
+    @staticmethod
+    def create(image_filepath):
+        # Read Image
+        with open(image_filepath, "rb") as image:
+            f = image.read()
+            binary = bytearray(f)
+            filename = ''
+            filepath = '{}'
+            session = session_factory()
+            current_obj = Picture(filename, binary, filepath)
+            try:
+                session.add(current_obj)
+                session.commit()
+            except:
+                session.rollback()
+                raise mvc_exc.InsertionError
+            finally:
+                session.close()
+            return current_obj

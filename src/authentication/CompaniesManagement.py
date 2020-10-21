@@ -34,15 +34,10 @@ class CompaniesManagement(object):
             # Vue company not found
 
     # when the user choose to edit or add new picture
-    def create_new_picture(self):
-        # Defining image storing functions
-        # with file
-        filename = 'name 11'
-        filepath = ''
-        binary = bytes('example', encoding='utf-8')
-        # Creating object and adding it
+    def create_new_picture(self, image_filepath):
+        # Read Image
         try:
-            self.current_picture = PicturesServices.create((filename, binary, filepath))
+            self.current_picture = PicturesServices.create(image_filepath)
             # Vue changing photo done
         except mvc_exc.InsertionError:
             # Vue needed to implement
