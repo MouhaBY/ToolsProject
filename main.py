@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from src.authentication.CompaniesManagement_Controller import CompaniesManagement
+from src.authentication.CompaniesManagement import CompaniesManagement
 
 
 def main():

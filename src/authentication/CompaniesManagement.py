@@ -40,6 +40,7 @@ class CompaniesManagement(object):
     # when the user choose to edit or add new picture
     def create_new_picture(self):
         # Defining image storing functions
+        # with file
         filename = 'name 11'
         filepath = ''
         binary = bytes('example', encoding='utf-8')
