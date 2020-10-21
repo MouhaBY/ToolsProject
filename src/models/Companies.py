@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, BOOLEAN
 
 from src.common.db import Base
+from src.models.Pictures import Picture
 
 
 class Company(Base):
@@ -21,7 +22,7 @@ class Company(Base):
     mail = Column(String)
     # pictures_id = Column(Integer)
     pictures_id = Column(Integer, ForeignKey('Pictures.id'))
-    picture = relationship("Picture")
+    picture = relationship("Picture", primaryjoin=pictures_id == Picture.id)
     active = Column(BOOLEAN, default=1)
 
     def __init__(self, name, code, address, registration, phone, mobile, website, mail, picture, active):
@@ -38,4 +39,4 @@ class Company(Base):
         self.active = active
 
     def __repr__(self):
-        return '<Company {}>'.format(self.name)
+        return '<Company - name : {}>'.format(self.name)

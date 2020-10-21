@@ -13,24 +13,21 @@ class CompaniesServices(object):
         """
         Initializes session and creating tables.
         """
-        # engine = create ..??
-        # self.session = session_factory(bind=engine)
         Companies.Base.metadata.create_all(engine)
-        # self.Session = session_factory()
 
     @staticmethod
-    def create(data):
+    def create(*args):
         session = session_factory()
-        current_obj = Company(data[0],data[1], data[2], data[3], data[4],
-                              data[5], data[6], data[7], data[8], data[9])
+        """current_obj = Company(data[0], data[1], data[2], data[3], data[4],
+                              data[5], data[6], data[7], data[8], data[9])"""
+        current_obj = Company(*args)
         try:
-            # __query_result = session.query(Company).filter(Company.name == current_obj.name).one()
-            # if __query_result is None:
-            session.add(current_obj)
-            session.commit()
-            session.close()
-            # else:
-            #    raise mvc_exc.ItemAlreadyExist
+            __query_result = session.query(Company).filter(Company.name == current_obj.name).first()
+            if __query_result is None:
+                session.add(current_obj)
+                session.commit()
+            else:
+                raise mvc_exc.ItemAlreadyExist
         except:
             session.rollback()
             raise
@@ -56,9 +53,27 @@ class CompaniesServices(object):
     def update(current_obj):
         session = session_factory()
         try:
-            __query_result = session.query(Company).filter(Company.name == current_obj.name)
-            session.commit()
+            __query_result = session.query(Company).filter(Company.name == current_obj.name).first()
             if __query_result is None:
+                session.close()
+                session = session_factory()
+                try:
+                    __check_record_obj = session.query(Company).get(current_obj.id)
+                    __check_record_obj.name = current_obj.name
+                    __check_record_obj.code = current_obj.code
+                    __check_record_obj.address = current_obj.address
+                    __check_record_obj.registration = current_obj.registration
+                    __check_record_obj.phone = current_obj.phone
+                    __check_record_obj.mobile = current_obj.mobile
+                    __check_record_obj.website = current_obj.website
+                    __check_record_obj.mail = current_obj.mail
+                    __check_record_obj.picture = current_obj.picture
+                    __check_record_obj.active = current_obj.active
+                    session.commit()
+                except:
+                    session.rollback()
+                    raise
+            else:
                 raise mvc_exc.ItemAlreadyExist
         except:
             session.rollback()
@@ -87,7 +102,8 @@ class CompaniesServices(object):
     def activate(current_obj, state):
         session = session_factory()
         try:
-            current_obj.active = state
+            __check_record_obj = session.query(Company).get(current_obj.id)
+            __check_record_obj.active = state
             session.commit()
         except:
             session.rollback()
@@ -101,8 +117,6 @@ class CompaniesServices(object):
         session = session_factory()
         try:
             companies_list_query = session.query(Company)
-            if companies_list_query is None:
-                raise mvc_exc.EmptyList
         except:
             session.rollback()
             raise

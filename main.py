@@ -6,7 +6,7 @@ from src.authentication.CompaniesManagement import CompaniesManagement
 
 def main():
     print("application is running")
-    o = CompaniesManagement()
+    controller_object = CompaniesManagement()
 
 
 if __name__.endswith('__main__'):

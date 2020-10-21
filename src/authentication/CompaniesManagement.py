@@ -20,21 +20,17 @@ class CompaniesManagement(object):
         CompaniesServices()
 
     def get_all_companies(self):
-        try:
-            self.companies_list = CompaniesServices.get_companies()
-            # Vue all companies datatable
-        except:
-            # Vue no element found
-            self.companies_list = None
+        self.companies_list = CompaniesServices.get_companies()
 
     """ User show one company in a new view """
 
     def get_company(self, id_item):
         try:
             self.current_company = CompaniesServices.read(id_item)
+            self.current_picture = self.current_company.picture
             # Vue company details
-        except:
-            self.current_company = None
+        except mvc_exc.ItemNotExist:
+            pass
             # Vue company not found
 
     # when the user choose to edit or add new picture
@@ -57,12 +53,13 @@ class CompaniesManagement(object):
     # edit existing company
     def edit_company(self):
         try:
-            self.current_company.name = 'value 1'
+            self.current_company.name = 'value 1_'
             self.current_company.code = 'value 2'
+            self.current_company.picture = self.current_picture
             __edited = CompaniesServices.update(self.current_company)
             self.current_company = __edited
             # Show view of saving data successfully and return to previous view
-        except:
+        except mvc_exc.ItemAlreadyExist:
             # Vue needed to implement, item not found
             pass
 
@@ -72,7 +69,7 @@ class CompaniesManagement(object):
         try:
             self.current_company = CompaniesServices.delete(self.current_company)
             # vue of removing successfully and return to previous view
-        except:
+        except mvc_exc.DeletionError:
             # Vue needed to implement
             pass
 
@@ -101,14 +98,13 @@ class CompaniesManagement(object):
     # user saves the data
     def create_new_company(self):
         try:
-            company_name = 'name created'
+            company_name = 'name created_1'
             company_code = 'code created'
             company_active = 1
             company_picture = self.current_picture
-            # self.current_company.picture =
-            self.current_company = CompaniesServices.create((company_name, company_code, None, None, None
-                                                             ,None, None, None, company_picture, company_active))
+            self.current_company = CompaniesServices.create(company_name, company_code, None, None, None,
+                                                            None, None, None, company_picture, company_active)
             # show view of saving data successfully
-        except :
-            # Vue needed to implement
+        except mvc_exc.ItemAlreadyExist:
             pass
+            # vue a implementer
