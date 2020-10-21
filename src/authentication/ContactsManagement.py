@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-import src.mvc_exceptions as mvc_exc
+import src.common.mvc_exceptions as mvc_exc
 
-from src.models import Pictures_model
+from src.models import Pictures
 from src.models import Contacts
 
 
@@ -36,7 +36,7 @@ def get_contact_by_id(id):
 # show image related to the  company, this is included in the get contact method
 def get_picture_by_id(item):
     try:
-        picture_by_id = Pictures_model.Picture.get(item)
+        picture_by_id = Pictures.Picture.get(item)
         # show image in contact details
     except (mvc_exc.ItemNotExist, mvc_exc.ParameterUnfilled):
         # Vue no image found
@@ -57,7 +57,7 @@ def create_new_picture():
     filename = ''
     binary = convertToBinaryData(filename)
     # Creating object and adding it
-    new_picture = Pictures_model.Picture.init((None, None, None, binary))
+    new_picture = Pictures.Picture.init((None, None, None, binary))
     try:
         new_picture.add()
         return new_picture.id

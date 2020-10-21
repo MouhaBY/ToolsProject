@@ -1,11 +1,9 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, BLOB, table
+from sqlalchemy import Column, Integer, String, BLOB
 
-
-Base = declarative_base()
+from src.common.db import Base
 
 
 class Picture(Base):
@@ -21,3 +19,6 @@ class Picture(Base):
         self.filename = filename
         self.binary = binary
         self.filepath = filepath
+
+    def __repr__(self):
+        return '<Picture {}>'.format(self.filename)

@@ -3,7 +3,7 @@
 
 
 import src.scripts.databasescripts as dbs
-import src.mvc_exceptions as mvc_exc
+import src.common.mvc_exceptions as mvc_exc
 
 
 class ProfileModule:

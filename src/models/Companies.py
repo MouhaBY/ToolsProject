@@ -1,12 +1,10 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, BOOLEAN
 
-
-Base = declarative_base()
+from src.common.db import Base
 
 
 class Company(Base):
@@ -21,12 +19,12 @@ class Company(Base):
     mobile = Column(String)
     website = Column(String)
     mail = Column(String)
-    pictures_id = Column(Integer)
-    #pictures_id = Column(Integer, ForeignKey('Pictures.id'))
-    # Picture = relationship("Picture")
+    # pictures_id = Column(Integer)
+    pictures_id = Column(Integer, ForeignKey('Pictures.id'))
+    picture = relationship("Picture")
     active = Column(BOOLEAN, default=1)
 
-    def __init__(self, name, code, address, registration, phone, mobile, website, mail, pictures_id, active):
+    def __init__(self, name, code, address, registration, phone, mobile, website, mail, picture, active):
         self.id = None
         self.name = name
         self.code = code
@@ -36,5 +34,8 @@ class Company(Base):
         self.mobile = mobile
         self.website = website
         self.mail = mail
-        self.pictures_id = pictures_id
+        self.picture = picture
         self.active = active
+
+    def __repr__(self):
+        return '<Company {}>'.format(self.name)

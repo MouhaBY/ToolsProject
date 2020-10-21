@@ -1,14 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from src import databaseinit as dbi
-import config
+from src.authentication.CompaniesManagement_Controller import CompaniesManagement
 
 
 def main():
-    """ create database and tables """
-    dbi.initialise_database(config.engine)
     print("application is running")
+    o = CompaniesManagement()
 
 
 if __name__.endswith('__main__'):
