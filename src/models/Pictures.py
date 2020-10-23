@@ -21,4 +21,4 @@ class Picture(Base):
         self.filepath = filepath
 
     def __repr__(self):
-        return '<Picture {}>'.format(self.filename)
+        return '<Picture {}>'.format(self.filepath)
