@@ -15,6 +15,7 @@ class CompaniesServices(object):
         """
         Companies.Base.metadata.create_all(engine)
         self.current_company = Company(None, None, None, None, None, None, None, None, None, None)
+        self.companies_list = None
 
     def create(self):
         session = session_factory()
@@ -25,19 +26,6 @@ class CompaniesServices(object):
                 session.commit()
             else:
                 raise mvc_exc.ItemAlreadyExist
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-        return self.current_company
-
-    def get(self, id_item):
-        session = session_factory()
-        try:
-            self.current_company = session.query(Company).get(id_item)
-            if self.current_company is None:
-                raise mvc_exc.ItemNotExist
         except:
             session.rollback()
             raise
@@ -108,15 +96,40 @@ class CompaniesServices(object):
             session.close()
         return self.current_company
 
-    @staticmethod
-    def get_companies():
+    def get_company_object(self, id_item):
         session = session_factory()
         try:
-            __companies_list_query = session.query(Company)
-            companies_list = __companies_list_query.all()
+            self.current_company = session.query(Company).get(id_item)
+            if self.current_company is None:
+                raise mvc_exc.ItemNotExist
         except:
             session.rollback()
             raise
         finally:
             session.close()
-        return companies_list
+        return self.current_company
+
+    def get_companies_objects(self):
+        session = session_factory()
+        try:
+            __companies_list_query = session.query(Company)
+            self.companies_list = __companies_list_query.all()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+        return self.companies_list
+
+    def get_company_details(self):
+        return self.current_company.model_to_data()
+
+    def get_companies_details(self):
+        dict_companies_list = []
+        for item in self.companies_list:
+            __item_i = item.model_to_data()
+            dict_companies_list.append(__item_i)
+        return dict_companies_list
+
+    def init_company(self):
+        self.current_company = Company(None, None, None, None, None, None, None, None, None, None)

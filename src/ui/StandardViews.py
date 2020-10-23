@@ -3,7 +3,7 @@
 
 class StandardView(object):
     def __init(self):
-        pass
+        self.object_name = None
 
     @staticmethod
     def show_notfound_error():

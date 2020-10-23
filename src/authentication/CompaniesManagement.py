@@ -25,27 +25,32 @@ class CompaniesManagement(object):
 
     def get_all_companies(self):
         # get data from database to datalist objects
-        __companies_list = self.company_service.get_companies()
+        __companies_list = self.company_service.get_companies_objects()
         # vue afficher toute la liste
         if __companies_list is not None:
-            self.companies_view.show_companieslist(__companies_list)
+            companies_list_dict = self.company_service.get_companies_details()
+            self.companies_view.show_companieslist(companies_list_dict)
         else:
             self.standard_view.show_emptylist()
 
     """ User show one company in a new view """
 
-    def get_company(self, id_item):
+    def get_company(self):
         # retrieve id item from vue
+        id_item = "2"
         try:
-            __obj_to_show = self.company_service.get(id_item)
+            __obj_to_show = self.company_service.get_company_object(id_item)
+            __obj_to_show_data = self.company_service.get_company_details()
             # Vue company details
-            self.company_view.show_company_details(__obj_to_show)
+            self.company_view.show_company_details(__obj_to_show_data)
         except mvc_exc.ItemNotExist:
             # Vue company not found
             self.standard_view.show_notfound_error()
 
     # when the user choose to edit or add new picture
-    def create_new_picture(self, image_filepath):
+    def create_new_picture(self):
+        # path from view
+        image_filepath = "D:/logo.png"
         # Read Image
         try:
             __picture_created = self.picture_service.create(image_filepath)
@@ -109,7 +114,8 @@ class CompaniesManagement(object):
     # user saves the data
     def create_new_company(self):
         try:
-            self.company_service.current_company.name = 'name created'
+            self.company_service.init_company()
+            self.company_service.current_company.name = 'name created_'
             self.company_service.current_company.code = 'code created'
             self.company_service.current_company.active = 1
             self.company_service.create()

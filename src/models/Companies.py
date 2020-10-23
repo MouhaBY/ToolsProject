@@ -40,3 +40,18 @@ class Company(Base):
 
     def __repr__(self):
         return '<Company - name : {}>'.format(self.name)
+
+    def model_to_data(self):
+        return {
+                "id": self.id,
+                "name": self.name,
+                "code": self.code,
+                "address": self.address,
+                "registration": self.registration,
+                "phone": self.phone,
+                "mobile": self.mobile,
+                "website": self.website,
+                "mail": self.mail,
+                "pictures_id": self.pictures_id,
+                "active": self.active
+        }
