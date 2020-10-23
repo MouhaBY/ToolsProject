@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-
-import src.scripts.databasescripts as dbs
 import src.common.mvc_exceptions as mvc_exc
 
 

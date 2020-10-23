@@ -50,7 +50,7 @@ class CompaniesServices(object):
                     __check_record_obj.mobile = self.current_company.mobile
                     __check_record_obj.website = self.current_company.website
                     __check_record_obj.mail = self.current_company.mail
-                    # __check_record_obj.picture = self.current_company.picture
+                    __check_record_obj.picture = self.current_company.picture
                     __check_record_obj.active = self.current_company.active
                     session.commit()
                     self.current_company = __check_record_obj

@@ -55,6 +55,7 @@ class CompaniesManagement(object):
         try:
             __picture_created = self.picture_service.create(image_filepath)
             self.company_service.current_company.picture = __picture_created
+            self.company_service.current_company.pictures_id = "1"
             # Vue charging photo done
             self.standard_view.saved_successfully()
         except mvc_exc.InsertionError:
