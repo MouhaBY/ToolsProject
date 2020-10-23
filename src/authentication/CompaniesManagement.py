@@ -6,6 +6,10 @@ import src.common.mvc_exceptions as mvc_exc
 from src.services.Pictures_services import PicturesServices
 from src.services.Companies_services import CompaniesServices
 
+from src.ui.CompaniesView import CompaniesView
+from src.ui.CompanyView import CompanyView
+from src.ui.StandardViews import StandardView
+
 """ Companies management menu """
 """ Show all companies is the default view """
 
@@ -13,78 +17,90 @@ from src.services.Companies_services import CompaniesServices
 class CompaniesManagement(object):
     """Class for managing items in the database"""
     def __init__(self):
-        self.current_company = None
-        self.companies_list = None
-        self.current_picture = None
-        PicturesServices()
-        CompaniesServices()
+        self.picture_service = PicturesServices()
+        self.company_service = CompaniesServices()
+        self.companies_view = CompaniesView()
+        self.company_view = CompanyView()
+        self.standard_view = StandardView()
 
     def get_all_companies(self):
-        self.companies_list = CompaniesServices.get_companies()
+        # get data from database to datalist objects
+        __companies_list = self.company_service.get_companies()
+        # vue afficher toute la liste
+        if __companies_list is not None:
+            self.companies_view.show_companieslist(__companies_list)
+        else:
+            self.standard_view.show_emptylist()
 
     """ User show one company in a new view """
 
     def get_company(self, id_item):
+        # retrieve id item from vue
         try:
-            self.current_company = CompaniesServices.read(id_item)
-            self.current_picture = self.current_company.picture
+            __obj_to_show = self.company_service.get(id_item)
             # Vue company details
+            self.company_view.show_company_details(__obj_to_show)
         except mvc_exc.ItemNotExist:
-            pass
             # Vue company not found
+            self.standard_view.show_notfound_error()
 
     # when the user choose to edit or add new picture
     def create_new_picture(self, image_filepath):
         # Read Image
         try:
-            self.current_picture = PicturesServices.create(image_filepath)
-            # Vue changing photo done
+            __picture_created = self.picture_service.create(image_filepath)
+            self.company_service.current_company.picture = __picture_created
+            # Vue charging photo done
+            self.standard_view.saved_successfully()
         except mvc_exc.InsertionError:
             # Vue needed to implement
-            pass
+            self.standard_view.not_saved()
 
     """ User save new company details and photo affection """
 
     # edit existing company
     def edit_company(self):
         try:
-            self.current_company.name = 'value 1_'
-            self.current_company.code = 'value 2'
-            self.current_company.picture = self.current_picture
-            __edited = CompaniesServices.update(self.current_company)
-            self.current_company = __edited
+            # datas from view
+            self.company_service.current_company.code = 'value_1'
+            self.company_service.current_company.name = 'value_2'
+            self.company_service.update()
             # Show view of saving data successfully and return to previous view
+            self.standard_view.saved_successfully()
         except mvc_exc.ItemAlreadyExist:
-            # Vue needed to implement, item not found
-            pass
+            self.standard_view.already_exists()
+
+    # edit picture for existing company
+    def edit_company_picture(self):
+        pass
 
     """ User delete the company details """
 
     def remove_company(self):
         try:
-            self.current_company = CompaniesServices.delete(self.current_company)
+            self.company_service.delete()
             # vue of removing successfully and return to previous view
+            self.standard_view.deleted_successfully()
         except mvc_exc.DeletionError:
-            # Vue needed to implement
-            pass
+            self.standard_view.not_deleted()
 
     """ user activate or deactivate the company shown """
 
     # deactivate existing company
     def deactivate_company(self):
         try:
-            self.current_company = CompaniesServices.activate(self.current_company, 0)
+            self.company_service.activate(0)
+            self.standard_view.saved_successfully()
         except:
-            # Vue needed to implement
-            pass
+            self.standard_view.not_saved()
 
     # activate existing company
     def activate_company(self):
         try:
-            self.current_company = CompaniesServices.activate(self.current_company, 1)
+            self.company_service.activate(1)
+            self.standard_view.saved_successfully()
         except:
-            # Vue needed to implement
-            pass
+            self.standard_view.not_saved()
 
     """ User add new company """
 
@@ -93,13 +109,10 @@ class CompaniesManagement(object):
     # user saves the data
     def create_new_company(self):
         try:
-            company_name = 'name created_1'
-            company_code = 'code created'
-            company_active = 1
-            company_picture = self.current_picture
-            self.current_company = CompaniesServices.create(company_name, company_code, None, None, None,
-                                                            None, None, None, company_picture, company_active)
-            # show view of saving data successfully
+            self.company_service.current_company.name = 'name created'
+            self.company_service.current_company.code = 'code created'
+            self.company_service.current_company.active = 1
+            self.company_service.create()
+            self.standard_view.saved_successfully()
         except mvc_exc.ItemAlreadyExist:
-            pass
-            # vue a implementer
+            self.standard_view.saved_successfully()
